@@ -1,0 +1,25 @@
+﻿body {
+    margin-top:50px;
+}
+
+#form1{
+    margin:auto;
+    text-align:center;
+    width:100%;
+    margin-top:50px;
+}
+.resultName{
+    color:green;
+}
+.resultDiv {
+    float: left;
+    margin: 20px 20px;
+}
+.ownerImg {
+    width: 150px;
+    height: 150px;
+}
+.redirect{
+    margin-top:10px;
+    margin-bottom:10px;
+}
