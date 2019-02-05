@@ -17,24 +17,22 @@ namespace EnterTheMatrix
     public partial class _default : System.Web.UI.Page
     {
         Color BookmarkColor = Color.Gold;
-
         protected void Page_Load(object sender, EventArgs e)
         {
-            //new GithubServices().GetRepositories("research-clouds");
-         
+                        
             if (IsPostBack && Session["queryResult"] != null)
             {
-                LoadRepositories();
+                RenderRepositories();
             }
-
-
-          
 
         }
 
 
-
-        protected void LoadRepositories(string term)
+        /// <summary>
+        /// renders results from api.github.com to screen via term
+        /// </summary>
+        /// <param name="term">query search term</param>
+        protected void RenderRepositories(string term)
         {
             div_results.Controls.Clear();
             List<GithubRepo> repositories = new GithubServices().GetRepositories(term);
@@ -46,9 +44,25 @@ namespace EnterTheMatrix
                 results.Add(div);
                 div_results.Controls.Add(div);
             }
+            if (results.Count < 1)
+            {
+                NoResultsError();
+            }
 
         }
-        protected void LoadRepositories()
+
+        public void NoResultsError()
+        {
+            HtmlGenericControl h2 = new HtmlGenericControl("h2");
+            h2.InnerText = "No results for the requested term, please try again";
+            div_results.Controls.Add(h2);
+        }
+
+        /// <summary>
+        /// renders the results stored in session.
+        /// used to re render after callback
+        /// </summary>
+        protected void RenderRepositories()
         {
             div_results.Controls.Clear();
             List<GithubRepo> results = (List<GithubRepo>)Session["queryResult"];
@@ -57,10 +71,18 @@ namespace EnterTheMatrix
                 HtmlGenericControl div = CreateRepositoryDiv(repo);
                 div_results.Controls.Add(div);
             }
+            if (results.Count < 1)
+            {
+                NoResultsError();
+            }
 
         }
 
-
+        /// <summary>
+        /// Create the gallery item  with the name avatar and bookmark button
+        /// </summary>
+        /// <param name="repo">GithubRepo object with information for the gallery item</param>
+        /// <returns>div with all the gallery item controls</returns>
         protected HtmlGenericControl CreateRepositoryDiv(GithubRepo repo)
         {
             HtmlGenericControl div = new HtmlGenericControl("div");
@@ -119,6 +141,10 @@ namespace EnterTheMatrix
 
         }
 
+        /// <summary>
+        /// removed a repository from session bookmarks
+        /// </summary>
+        /// <param name="id">id of the removed bookmark repo</param>
         protected void RemoveFromBookmarks(int id)
         {
             if (Session["bookmarks"] == null)
@@ -138,6 +164,10 @@ namespace EnterTheMatrix
 
         }
 
+        /// <summary>
+        /// adds a repository to session bookmarks
+        /// </summary>
+        /// <param name="id">repository id to be added</param>
         protected void AddToBookmarks(int id)
         {
             List<GithubRepo> bookmarks;
@@ -180,7 +210,7 @@ namespace EnterTheMatrix
 
         protected void btn_search_click(object sender, EventArgs e)
         {
-            LoadRepositories(tbSearch.Text);
+            RenderRepositories(tbSearch.Text);
         }
 
 

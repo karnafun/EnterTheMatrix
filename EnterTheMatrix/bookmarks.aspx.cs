@@ -11,6 +11,7 @@ namespace EnterTheMatrix
 {
     public partial class bookmarks : System.Web.UI.Page
     {
+        
         Color BookmarkColor = Color.Gold;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -18,7 +19,10 @@ namespace EnterTheMatrix
             if (Session["bookmarks"] != null && ((List<GithubRepo>)Session["bookmarks"]).Count>0)            
                 RenderBookmarks();            
             else            
-                NoBookmarksError();           
+                NoBookmarksError();
+
+                 
+
         }
 
         private void NoBookmarksError()
